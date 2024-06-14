@@ -32,6 +32,18 @@ def clean_zipcode(zipcode)
     zipcode.to_s.rjust(5, '0')[0..4]
 end
 
+def clean_phone(phone)
+    nil
+    if phone.length >= 10
+        ph_no = phone.strip.tr('()-. ', '')
+         if ph_no.length == 11 &&
+            ph_no.start_with?('1')
+                ph_no = ph_no.strip.tr('()-. ', '').slice(1..)
+         end
+         ph_no
+    end
+end
+
 puts "Event Manager Intialized!"
 
 contents = CSV.open(
@@ -44,20 +56,21 @@ template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
 
 contents.each do |row|
-    puts row
     id = row[0]
     name = row[:first_name]
 
+    phone = clean_phone(row[:homephone])
+    unless phone.nil?
+      puts "Phone number  #{phone} belongs to #{name}"
+    end
 
     zipcode = clean_zipcode(row[:zipcode])
 
     legislators = legislators_by_zipcode(zipcode)  
 
-    puts "#{id} #{name} "
+    form_letter = erb_template.result(binding)
 
-    # form_letter = erb_template.result(binding)
-
-    # save_thank_you_letter(id, form_letter)
+    save_thank_you_letter(id, form_letter)
 
 end
 
