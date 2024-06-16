@@ -1,6 +1,8 @@
 require 'csv'
 require 'google/apis/civicinfo_v2'
 require 'erb'
+require 'date'
+require 'time'
 
 def legislators_by_zipcode(zip)
     civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
@@ -44,6 +46,14 @@ def clean_phone(phone)
     end
 end
 
+def calc_hour_stat(hour_stat, date)
+    hour_stat[ ((date.split(' ')[1]).split(':')[0]).to_i ] += 1
+end
+
+def calc_wday_stat(wday_stat, date)
+    wday_stat[Date.strptime( date.split(' ')[0], "%m/%d/%y").wday ] += 1
+end
+
 puts "Event Manager Intialized!"
 
 contents = CSV.open(
@@ -52,12 +62,22 @@ contents = CSV.open(
     header_converters: :symbol
 )
 
+hour_stat = Array.new(24, 0)
+wday_stat = Array.new(7, 0)
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
 
 contents.each do |row|
     id = row[0]
     name = row[:first_name]
+
+    date = row[:regdate]
+
+    calc_hour_stat(hour_stat, date)
+    calc_wday_stat(wday_stat, date)
+    
+    puts hour_stat
+    puts wday_stat
 
     phone = clean_phone(row[:homephone])
     unless phone.nil?
