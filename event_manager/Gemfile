@@ -6,10 +6,3 @@ source 'https://rubygems.org'
 
 gem 'rubocop', '~> 1.64'
 
-gem "csv", "~> 3.3"
-
-gem "erb", "~> 4.0"
-
-gem "date", "~> 3.3"
-
-gem "time", "~> 0.3.0"
