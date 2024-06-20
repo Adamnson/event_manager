@@ -2,6 +2,11 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
+    cgi (0.4.1)
+    csv (3.3.0)
+    date (3.3.4)
+    erb (4.0.4)
+      cgi (>= 0.3.3)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
     parallel (1.25.1)
@@ -28,13 +33,19 @@ GEM
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
     strscan (3.1.0)
+    time (0.3.0)
+      date
     unicode-display_width (2.5.0)
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  csv (~> 3.3)
+  date (~> 3.3)
+  erb (~> 4.0)
   rubocop (~> 1.64)
+  time (~> 0.3.0)
 
 BUNDLED WITH
    2.4.10

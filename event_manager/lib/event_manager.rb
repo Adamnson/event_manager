@@ -1,10 +1,6 @@
-require 'csv'
 require 'google/apis/civicinfo_v2'
-require 'erb'
-require 'date'
-require 'time'
 
-def legislators_by_zipcode(zip)
+def legislators_by_zipcode(zip) # rubocop:disable Metrics/MethodLength
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
   civic_info.key = 'AIzaSyClRzDqDh5MsXwnCWi0kOiiBivP6JsSyBw'
 
@@ -74,7 +70,7 @@ contents = CSV.open(
 
 hour_stat = Array.new(24, 0)
 wday_stat = Array.new(7, 0)
-DAYS = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday]
+DAYS = %w[Sunday Monday Tuesday Wednesday Thursday Friday Saturday].freeze
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
 
@@ -92,7 +88,7 @@ contents.each do |row|
 
   zipcode = clean_zipcode(row[:zipcode])
 
-  legislators = legislators_by_zipcode(zipcode)
+  legislators_by_zipcode(zipcode)
 
   form_letter = erb_template.result(binding)
 
