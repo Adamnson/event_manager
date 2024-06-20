@@ -1,4 +1,8 @@
+require 'csv'
 require 'google/apis/civicinfo_v2'
+require 'erb'
+require 'date'
+require 'time'
 
 def legislators_by_zipcode(zip) # rubocop:disable Metrics/MethodLength
   civic_info = Google::Apis::CivicinfoV2::CivicInfoService.new
@@ -88,7 +92,7 @@ contents.each do |row|
 
   zipcode = clean_zipcode(row[:zipcode])
 
-  legislators_by_zipcode(zipcode)
+  legislators = legislators_by_zipcode(zipcode)
 
   form_letter = erb_template.result(binding)
 
