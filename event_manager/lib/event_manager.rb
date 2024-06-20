@@ -54,6 +54,18 @@ def calc_wday_stat(wday_stat, date)
     wday_stat[Date.strptime( date.split(' ')[0], "%m/%d/%y").wday ] += 1
 end
 
+def display_wday_stat(wday_stat)
+    DAYS.zip(wday_stat).each do |day, stat|
+        puts "#{day}: #{stat}"
+    end
+end
+
+def display_hour_stat(hour_stat)
+    hour_stat.each_with_index do |stat, idx|
+        puts "#{idx}-#{(idx+1)%24}: #{stat}"
+    end
+end
+
 puts "Event Manager Intialized!"
 
 contents = CSV.open(
@@ -64,6 +76,7 @@ contents = CSV.open(
 
 hour_stat = Array.new(24, 0)
 wday_stat = Array.new(7, 0)
+DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 template_letter = File.read('form_letter.erb')
 erb_template = ERB.new template_letter
 
@@ -75,9 +88,6 @@ contents.each do |row|
 
     calc_hour_stat(hour_stat, date)
     calc_wday_stat(wday_stat, date)
-    
-    puts hour_stat
-    puts wday_stat
 
     phone = clean_phone(row[:homephone])
     unless phone.nil?
@@ -94,3 +104,5 @@ contents.each do |row|
 
 end
 
+display_wday_stat(wday_stat)
+display_hour_stat(hour_stat)
